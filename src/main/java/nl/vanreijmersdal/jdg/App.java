@@ -10,7 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -23,8 +22,9 @@ public class App {
         Data data = new Data();
 
         //Settings
-        data.outputFilename = "data.csv";
-        data.outputRowCount = 10000;
+        data.filename = "data.csv";
+        data.seperator = '\t';
+        data.numberOfResults = 10000;
         
         // Add columns
         data.addColumn("DATE", "date", "20100101", "20130118");
@@ -40,15 +40,15 @@ public class App {
 
 class Data {
     char seperator = '\t';
-    int currentRow = 0;
-    int outputRowCount = 1;
-    String outputFilename = "output.csv";
-    // Columns contain a list of strings, first is the type, the rest are parameters
+    int rowId = 0;
+    int numberOfResults = 1;
+    String filename = "output.csv";
+    
+    // columns contain a list of strings, first is the type, the rest are parameters
     private List<List<String>> columns = new ArrayList<List<String>>();
     
     String generateRow() throws ParseException {
-        String row = "";
-        row += ++currentRow;
+        String row = "" + ++rowId;
         
      	Iterator<List<String>> iterator = columns.iterator();
         while(iterator.hasNext()) {
@@ -58,24 +58,20 @@ class Data {
             String type = column.next();
             
             // Settings
-            String settings[] = new String[4];
-            int counter = 0;
+            String settings[] = new String[3];
+            int key = 0;
             while(column.hasNext()) {
-                settings[counter] = column.next();
-                counter++;
+                settings[key++] = column.next();
             }
             
-            // Add column data to the row
+            // Append column data to the row
             if(type.equals("string")) {
                 row += Generator.genString(Integer.parseInt(settings[0]));
-            }
-            if(type.equals("float")) {
+            } else if(type.equals("float")) {
                 row += Generator.genFloat(Integer.parseInt(settings[0]), Integer.parseInt(settings[1]), Integer.parseInt(settings[2]));
-            }
-            if(type.equals("int")) {
+            } else if(type.equals("int")) {
                 row += Generator.genInt(Integer.parseInt(settings[0]), Integer.parseInt(settings[1]));
-            }
-            if(type.equals("date")) {
+            } else if(type.equals("date")) {
                 row += Generator.genDate(settings[0], settings[1]);
             }            
         }
@@ -83,7 +79,7 @@ class Data {
     }
 
     void generate() throws ParseException {
-        File file = new File(outputFilename);
+        File file = new File(filename);
         try {
             BufferedWriter output = new BufferedWriter(new FileWriter(file));
             // Header
@@ -99,7 +95,7 @@ class Data {
             output.newLine();
             
             // Rows
-            for (int i = 0; i < outputRowCount; i++) {
+            for (int i = 0; i < numberOfResults; i++) {
                 output.append(generateRow());
                 output.newLine();
             }
@@ -110,8 +106,9 @@ class Data {
 
     /**
      * Adds a column to the output file
-     * First argument should be the type
-     * Then the settings for the type
+     * First argument is the field name
+     * Second argument is the type
+     * Then come the settings for the type
      * 
      * @param args 
      */
@@ -123,9 +120,11 @@ class Data {
 }
 
 class Generator {
+    static String alphabet = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890";
+    static String alphabet_utf8 = "àáâãäåæ";
+
     static String genString(int lenght) {
         Random r = new Random();
-        String alphabet = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890";
         String result = "";
         for (int i = 0; i < lenght; i++) {
             result += alphabet.charAt(r.nextInt(alphabet.length()));

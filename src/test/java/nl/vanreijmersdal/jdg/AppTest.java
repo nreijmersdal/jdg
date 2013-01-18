@@ -143,7 +143,7 @@ public class AppTest extends TestCase {
 
     public void testDataFileNumberOfLinesTen() throws ParseException {
         Data data = new Data();
-        data.outputRowCount = 10;
+        data.numberOfResults = 10;
         data.generate();
         try {
             LineNumberReader lnr = new LineNumberReader(new FileReader("output.csv"));
@@ -155,7 +155,7 @@ public class AppTest extends TestCase {
 
     public void testDataFileNumberOfLines1001() throws ParseException {
         Data data = new Data();
-        data.outputRowCount = 1001;
+        data.numberOfResults = 1001;
         data.generate();
         try {
             LineNumberReader lnr = new LineNumberReader(new FileReader("output.csv"));
