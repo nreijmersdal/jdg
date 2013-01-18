@@ -61,13 +61,13 @@ public class AppTest extends TestCase {
         assertEquals(8, date.length());
     }
     
-    public void testDataRow() {
+    public void testDataRow() throws ParseException {
         Data data = new Data();
         String row = data.generateRow();
         assertEquals("1", row);  
     }
 
-    public void testDataTwoRows() {
+    public void testDataTwoRows() throws ParseException {
         Data data = new Data();
         String row = data.generateRow();
         String row2 = data.generateRow();
@@ -75,7 +75,7 @@ public class AppTest extends TestCase {
         assertEquals("2", row2);  
     }
 
-    public void testDataAddColumn() {
+    public void testDataAddColumn() throws ParseException {
         Data data = new Data();
         data.addColumn("FIELD","string", "10");
         String row = data.generateRow();
@@ -84,7 +84,7 @@ public class AppTest extends TestCase {
         assertEquals(10,parts[1].length());
     }  
 
-    public void testDataAddTwoColumns() {
+    public void testDataAddTwoColumns() throws ParseException {
         Data data = new Data();
         data.addColumn("FIELD","string", "10");
         data.addColumn("FIELD","string", "5");
@@ -95,7 +95,7 @@ public class AppTest extends TestCase {
         assertEquals(5,parts[2].length());
     }  
 
-    public void testDataMixed() {
+    public void testDataMixed() throws ParseException {
         Data data = new Data();
         data.addColumn("STRING","string", "10");
         data.addColumn("FLOAT","float", "100", "999", "2");
@@ -110,7 +110,7 @@ public class AppTest extends TestCase {
         assertEquals(8,parts[4].length());       
     }  
     
-    public void testDataSeperator() {
+    public void testDataSeperator() throws ParseException {
         Data data = new Data();
         data.seperator = ',';
         data.addColumn("FIELD","string", "6");
@@ -120,14 +120,14 @@ public class AppTest extends TestCase {
         assertEquals(6,parts[1].length());
    }
     
-    public void testDataFileCreation() {
+    public void testDataFileCreation() throws ParseException {
         Data data = new Data();
         data.generate();
         File f = new File("output.csv");
         assertTrue(f.exists());
     }
 
-    public void testDataFileContents() {
+    public void testDataFileContents() throws ParseException {
         Data data = new Data();
         String row = "";
         data.generate();
@@ -141,7 +141,7 @@ public class AppTest extends TestCase {
         assertEquals("1", row);  
     }
 
-    public void testDataFileNumberOfLinesTen() {
+    public void testDataFileNumberOfLinesTen() throws ParseException {
         Data data = new Data();
         data.outputRowCount = 10;
         data.generate();
@@ -153,7 +153,7 @@ public class AppTest extends TestCase {
         }
     }
 
-    public void testDataFileNumberOfLines1001() {
+    public void testDataFileNumberOfLines1001() throws ParseException {
         Data data = new Data();
         data.outputRowCount = 1001;
         data.generate();
@@ -165,7 +165,7 @@ public class AppTest extends TestCase {
         }
     }
     
-    public void testDataFileHeader() {
+    public void testDataFileHeader() throws ParseException {
         Data data = new Data();
         String header = "";
         data.addColumn("FIELDNAME1","string", "10");

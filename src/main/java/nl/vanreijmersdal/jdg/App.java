@@ -154,21 +154,11 @@ class Generator {
     }
 
     static String genDate(String start, String end) throws ParseException {
-        String startYear  = start.substring(0, 3);
-        String startMonth = start.substring(4, 5);
-        String startDay   = start.substring(6, 7);
-        String endYear  = end.substring(0, 3);
-        String endMonth = end.substring(4, 5);
-        String endDay   = end.substring(6, 7);
-
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-        Date startDate = dateFormat.parse(start);
-        long startTimestamp = startDate.getTime();
-
-        Date endDate = dateFormat.parse(end);
-        long endTimestamp = endDate.getTime();
-        
+        long startTimestamp = dateFormat.parse(start).getTime();
+        long endTimestamp = dateFormat.parse(end).getTime();
         long diff = endTimestamp - startTimestamp + 1;
+
         Timestamp newTimestamp = new Timestamp(startTimestamp + (long)(Math.random() * diff));
         
         return dateFormat.format(newTimestamp);
