@@ -42,6 +42,38 @@ public class AppTest extends TestCase {
         assertEquals(2, parts[1].length());
     }
 
+    public void testRandomMultipleInt() {
+        String value = Generator.genMultipleInt("|",4,0,10000);
+        String[] parts = value.split("\\|");
+        int intpart;
+        int counter = 0;
+        for (String stringValue : parts) {
+          intpart = Integer.parseInt(stringValue);
+          if(intpart < 0 || intpart > 10000) {
+            fail("Returned value is outside of defined range");       
+          } else {
+            counter++;
+          }
+        }
+        assertEquals(4, counter);
+    }
+
+    public void testRandomMultipleIntDiffSeperator() {
+        String value = Generator.genMultipleInt("-",4,0,10000);
+        String[] parts = value.split("-");
+        int intpart;
+        int counter = 0;
+        for (String stringValue : parts) {
+          intpart = Integer.parseInt(stringValue);
+          if(intpart < 0 || intpart > 10000) {
+            fail("Returned value is outside of defined range");       
+          } else {
+            counter++;
+          }
+        }
+        assertEquals(4, counter);
+    }
+    
     public void testRandomFloat2() {
         // Generate a float between 0 and 10000 with 2 decimals
         String value = Generator.genFloat(0,10000,9);
@@ -101,13 +133,15 @@ public class AppTest extends TestCase {
         data.addColumn("FLOAT","float", "100", "999", "2");
         data.addColumn("INT","int", "100", "999");
         data.addColumn("DATE","date", "19993112", "20010101");
+        data.addColumn("MULTIPLEINT","multipleint", "|", "3", "100", "999");
         String row = data.generateRow();
         String[] parts = row.split("\t");
         assertEquals("1", parts[0]);  
         assertEquals(10,parts[1].length());
         assertEquals(6,parts[2].length());
         assertEquals(3,parts[3].length());       
-        assertEquals(8,parts[4].length());       
+        assertEquals(8,parts[4].length());
+        assertEquals(11, parts[5].length());
     }  
     
     public void testDataSeperator() throws ParseException {

@@ -29,8 +29,9 @@ public class App {
         // Add columns
         data.addColumn("DATE", "date", "20100101", "20130118");
         data.addColumn("STRING", "string", "10");
-        data.addColumn("INT", "int", "10", "1000");
-        data.addColumn("FLOAT", "float", "10", "1000", "3");
+        data.addColumn("INT", "int", "1", "10");
+        data.addColumn("FLOAT", "float", "0", "1000", "2");
+        data.addColumn("MULTIPLEINT", "multipleint", "|", "10", "1", "10");
         data.addColumn("LONGSTRING", "string", "255");
         
         // Create file
@@ -58,7 +59,7 @@ class Data {
             String type = column.next();
             
             // Settings
-            String settings[] = new String[3];
+            String settings[] = new String[4];
             int key = 0;
             while(column.hasNext()) {
                 settings[key++] = column.next();
@@ -73,7 +74,9 @@ class Data {
                 row += Generator.genInt(Integer.parseInt(settings[0]), Integer.parseInt(settings[1]));
             } else if(type.equals("date")) {
                 row += Generator.genDate(settings[0], settings[1]);
-            }            
+            } else if(type.equals("multipleint")) {
+                row += Generator.genMultipleInt(settings[0], Integer.parseInt(settings[1]), Integer.parseInt(settings[2]), Integer.parseInt(settings[3]));                
+            }
         }
         return row;
     }
@@ -161,5 +164,17 @@ class Generator {
         Timestamp newTimestamp = new Timestamp(startTimestamp + (long)(Math.random() * diff));
         
         return dateFormat.format(newTimestamp);
+    }
+
+    static String genMultipleInt(String seperator, int lenght, int min, int max) {
+        String result = "";
+        for (int i = 0; i < lenght; i++) {
+            if(i!=0) {
+                // first time print no seperator
+                result += seperator;
+            }
+            result += Generator.genInt(min, max);
+        }
+        return result;
     }
 }
